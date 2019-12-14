@@ -15,6 +15,12 @@
 ####################################### Secure Installation #######################################
 ###################################################################################################
 
+# HELM_HOME
+# HELM_HOST
+# HELM_NO_PLUGINS
+# TILLER_NAMESPACE
+# KUBECONFIG
+
 function __install_helm {
     # Install Helm binary using the latest version script for its repo
 
@@ -39,16 +45,20 @@ function __safe_helm_installation {
 }
 
 function __remove_existed_tiller {
-    # # Check TLS usage status, in case the certificates under HELM_HOME can be used
-    # set +e
-    # helm version --tls
-    # helm_status=$?
-    # set -e
+    # TODO: check is existing certificates can be used
+    
+    # Check TLS usage status, in case the certificates under HELM_HOME can be used
+    set +e
+    helm version --tls
+    helm_status=$?
+    set -e
+
+    # Helm has successfully deployed TLS 
+    if [ $helm_status -eq 0 ]; then
+        return;
 
     # When error code is different to zero, there is an issue with TLS.
     # Therefore, we need to re-generate the TLS certificates
-    # if [ $helm_status -ne 0 ]; then
-        # Check if tiller exists
     set +e
     tiller_exist=$(kubectl get pods --namespace kube-system \
         | awk '{print $1}' \
@@ -60,7 +70,6 @@ function __remove_existed_tiller {
     if [ $tiller_exist -ne 0 ]; then
         helm reset --force
     fi
-    # fi
 }
 
 function __openssl_ca_generation {
@@ -83,6 +92,8 @@ function __openssl_cert_generation {
     # Generate the certificates for the $1 component
     # $1 -> the component for which the certificates will be generated
     if [ $# -ne 1 ]; then
+        echo "Please specify the entity for which the TLS certificates will 
+              be deployed"
     fi
 
     echo "Generating the certificates for the $1 end..."
@@ -115,7 +126,7 @@ function __store_certificates {
     cp helm.key.pem $helm_home/key.pem
 
     # Backup all the certificate files
-    mkdir -p $helm_home/certificates
+    mkdir -p $helm_home/.certificates
     mv ca.cert.pem \
         ca.key.pem \
         ca.srl \
@@ -125,9 +136,7 @@ function __store_certificates {
         tiller.key.pem \
         tiller.csr.pem \
         tiller.cert.pem \
-        $helm_home/certificates
-
-    # Encrypt folder
+        $helm_home/.certificates
 }
 
 function secure_helm_install {
