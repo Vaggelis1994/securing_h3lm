@@ -11,18 +11,37 @@
 # ToDo: openssl keys should prompt for passwords
 # ToDo: sleep??
 
+
+
+###################################################################################################
+########################################### Secure Helm ###########################################
+###################################################################################################
+
+# Source files
+
+. ./secure_helm_install.sh
+. ./secure_helm_secret.sh
+. ./secure_helm_rbac.sh
+. ./secure_helm_chart.sh
+. ./secure_helm_misc.sh
+
+# Export variables
+
 # HELM_HOME
 # HELM_HOST
 # HELM_NO_PLUGINS
 # TILLER_NAMESPACE
 # KUBECONFIG
 
-###################################################################################################
-########################################### Secure Helm ###########################################
-###################################################################################################
+# Optional helm auto-completion
+shell=$(which $SHELL | cut -d'/' -f3)
+helm completion $shell > .completion
+. ./.completion
+rm -f .completion
 
 function secure_helm {
 
+	# parse input
     # service_account_name 
     # namespace
 

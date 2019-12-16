@@ -15,11 +15,9 @@ function __install_helm {
 }
 
 function __safe_helm_installation {
+    
     # Check helm binary installation status
-    set +e
-    which helm
-    helm_status=$?
-    set -e
+    helm_status=$(which helm)
 
     # When error code is different to 0, helm is not installed
     if [ $helm_status -ne 0 ]; then
