@@ -6,13 +6,13 @@ By default, installing and using Helm is not granting any security at all. While
 
 * Latest `helm` binary installation.
 * Latest `helm-secrets` installation; the plugin to manage and store secrets safely.
-* _Helm_ and _Tiller_ communication over TLS.
-* Integrity of automatically rolling deployments, when configmaps or secrets change.
-* RBAC utilization for the cluster used by Helm.
-* Configuration of _Tiller_ for each gRPC endpoint to be using a separate TLS certificate.
-* Release information being a _Kubernetes Secret_.
-* _Tiller_ installation per entity, with the `--service-account`.
+* **Helm** and **Tiller** communication over TLS.
+* Integrity of **Automatically Rolling Deployments**, when configmaps or secrets change.
+* **RBAC** utilization for the cluster used by Helm.
+* Configuration of **Tiller** for each **gRPC** endpoint to be using a separate TLS certificate.
+* Release information being a **Kubernetes Secret**.
+* **Tiller** installation per entity, with the `--service-account`.
 * Verification with the `--tiller-tls-verify` and `--tls` flags.
-* Verification that the _Charts_ being signed and valid.
-* Generation of the _provenance_ files for integrity purposes.
-* Generation of a helper template to securely create image pull secrets.
+* Verification that the **Charts** being signed and valid.
+* Generation of the **provenance** files for integrity purposes.
+* Generation of a helper template to securely create **Image Pull Secrets**.
