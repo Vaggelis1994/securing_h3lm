@@ -12,7 +12,12 @@ function __check_gpg_status {
     gpg_status=$?
     if [ $gpg_status -ne 0 ]; then
         echo "GnuPG is not installed. Installing it..."
+
+        # TODO: install gpg with the default 
+        # package manager based on the OS
+
         sudo apt install gpg
+        # brew install gpg
     fi
 }
 
@@ -30,12 +35,32 @@ function __generate_gpg_keypair {
     # gpg --export-secret-keys > ~/.gnupg/secring.gpg
 }
 
+function __check_keybase_status {
+
+    keybase_version=$(keybase --version)
+
+    keybase_version=$?
+    if [ $keybase_version -ne 0 ]; then 
+        echo "Keybase is not installed.
+              It is recommended to follow process manually for its installation."
+        # TODO: try to install it automatically based on the OS   
+
+        # MacOS
+        # curl --remote-name https://prerelease.keybase.io/Keybase.dmg
+        # sudo hdiutil attach Keybase.dmg
+        # copy files automatically
+        # keybase_version=$(keybase --version)
+        # while keybase has not been installed  
+        # sudo hdiutil detach /Volumes/Keybase\ App/
+}
+
 function __generate_keybase_credentials {
 
     # check keybase installation
-    keybase_version=$(keybase --version)
+    __check_keybase_status
 
     # check keybase account
+    keybase account email list
     if []; then
         keybase login
     else
@@ -68,35 +93,90 @@ function secure_chart_packaging {
     # $3 = path to secring.gpg
     # $4 = key phrase
 
-    if []; then
+    while [[ $# -gt 0 ]] do
+        key="$1"
+
+        case $key in 
+            -d|--directory)
+            directory="$2"
+            shift
+            shift
+            ;;
+            -m|--mode)
+            mode="$2"
+            shift
+            shift
+            ;;
+            -s|--secring)
+            secring="$2"
+            shift
+            shift
+            ;;
+            -k|--keyphrase)
+            keyphrase="$2"
+            shift
+            shift
+            ;;
+            *)
+            shift
+            ;;
+        esac
+    done
+        
+    if [ -f secring ]; then
         # use an existing keypair
 
-    elif []; then
+    elif [ $mode = "gpg" ]; then
         __generate_pgp_keypair
-        key_phrase=$4
 
-    elif []; then
+    elif [ $mode = "keybase" ]; then
         __generate_keybase_credentials
-        key_phrase=$( head $3 -n 1 | cut -d' ' -f1 )
+        keyphrase=$(head $secring -n 1 | cut -d' ' -f1 )
     fi
 
-    # helm package ?
     helm package \
         --sign \
-        --key $key_phrase \
-        --keyring $3 \
-        $1
+        --key $keyphrase \
+        --keyring $secring \
+        $directory
 
     # check if provenance file has been generated
-    secure_verify_charts $1
+    secure_verify_charts $directory
 }
 
 function secure_verify_charts {
 
-    # https://github.com/helm/helm/blob/master/docs/provenance.md
-    if []; then
+    '''
+    http://helm.sh/docs/topics/provenance/
+    '''
+
+    # $1 - chart directory
+    # $2 - mode
+
+    while [[ $# -gt 0 ]] do
+        key="$1"
+
+        case $key in 
+            -d|--directory)
+            directory="$2"
+            shift
+            shift
+            ;;
+            -m|--mode)
+            mode="$2"
+            shift
+            shift
+            ;;
+            *)
+            shift
+            ;;
+        esac
+    done 
+
+
+    if [ $mode = "keybase" ]; then
         __keybase_verify_charts $1
     fi
 
-    helm verify $1/../$1*.tgz
+    helm verify $directory/../$directory*.tgz
 }
