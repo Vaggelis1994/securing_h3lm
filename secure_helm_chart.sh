@@ -32,6 +32,8 @@ function __generate_gpg_keypair {
     else
         gpg --default-new-key-algo rsa4096 --gen-key
     fi
+    
+    # TODO: check if this line is needed: 
     # gpg --export-secret-keys > ~/.gnupg/secring.gpg
 }
 
@@ -43,8 +45,8 @@ function __check_keybase_status {
     if [ $keybase_version -ne 0 ]; then 
         echo "Keybase is not installed.
               It is recommended to follow process manually for its installation."
-        # TODO: try to install it automatically based on the OS   
 
+        # TODO: try to install it automatically based on the OS   
         # MacOS
         # curl --remote-name https://prerelease.keybase.io/Keybase.dmg
         # sudo hdiutil attach Keybase.dmg
@@ -60,10 +62,14 @@ function __generate_keybase_credentials {
     __check_keybase_status
 
     # check keybase account
-    keybase account email list
-    if []; then
+    logged=$(keybase account email list)
+
+    # TODO: review error return codes and
+    # logged session outputs
+    
+    if [ $logged -ne 2 ]; then 
         keybase login
-    else
+    elif [ $logged -eq 2 ]; then
         keybase signup
     fi
 
@@ -81,17 +87,28 @@ function __generate_keybase_credentials {
 
 function __keybase_verify_charts {
 
+    '''
+
+    # $1 - user
+    
+    '''
+
     keybase follow $1
     keybase pgp pull
-    #is this supposed to work without the prov files?
+    
+    # TODO: is this supposed to work without the prov files (?)
 }
 
 function secure_chart_packaging {
 
-    # $1 = chart directory
-    # $2 = gpg or keybase
-    # $3 = path to secring.gpg
-    # $4 = key phrase
+    '''
+    
+    # $1 - chart directory
+    # $2 - gpg or keybase
+    # $3 - path to secring.gpg
+    # $4 - key phrase
+    
+    '''
 
     while [[ $# -gt 0 ]] do
         key="$1"
@@ -123,7 +140,8 @@ function secure_chart_packaging {
         esac
     done
         
-    if [ -f secring ]; then
+    if [ -f secring ]; then 
+        continue;
         # use an existing keypair
 
     elif [ $mode = "gpg" ]; then
@@ -147,12 +165,14 @@ function secure_chart_packaging {
 function secure_verify_charts {
 
     '''
-    http://helm.sh/docs/topics/provenance/
-    '''
-
+    
+    Source: http://helm.sh/docs/topics/provenance/
+    
     # $1 - chart directory
     # $2 - mode
-
+    
+    '''
+    
     while [[ $# -gt 0 ]] do
         key="$1"
 
@@ -167,6 +187,11 @@ function secure_verify_charts {
             shift
             shift
             ;;
+            -u|--user)
+            user="$2"
+            shift
+            shift
+            ;;
             *)
             shift
             ;;
@@ -175,7 +200,7 @@ function secure_verify_charts {
 
 
     if [ $mode = "keybase" ]; then
-        __keybase_verify_charts $1
+        __keybase_verify_charts $directory
     fi
 
     helm verify $directory/../$directory*.tgz
