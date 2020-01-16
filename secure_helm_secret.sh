@@ -6,6 +6,10 @@
 
 . ./secure_helm_install.sh 
 
+function __safe_secrets_installation {
+
+}
+
 function secure_helm_secrets_install {
 
     # check helm status
@@ -42,10 +46,6 @@ function secure_helm_secrets_install {
 
     # Visit the documentation for more info
     echo "Visit: https://github.com/futuresimple/helm-secrets for more information on usage."
-}
-
-function __safe_secrets_installation {
-
 }
 
 function secure_helm_secrets_encrypt {
