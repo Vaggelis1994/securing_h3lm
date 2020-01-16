@@ -11,14 +11,11 @@
 # ToDo: openssl keys should prompt for passwords
 # ToDo: sleep??
 
-
-
 ###################################################################################################
 ########################################### Secure Helm ###########################################
 ###################################################################################################
 
 # Source files
-
 . ./secure_helm_install.sh
 . ./secure_helm_secret.sh
 . ./secure_helm_rbac.sh
@@ -26,12 +23,11 @@
 . ./secure_helm_misc.sh
 
 # Export variables
-
-# HELM_HOME
-# HELM_HOST
-# HELM_NO_PLUGINS
-# TILLER_NAMESPACE
-# KUBECONFIG
+export HELM_HOME=
+export HELM_HOST=
+export HELM_NO_PLUGINS=
+export TILLER_NAMESPACE=
+export KUBECONFIG=
 
 # Optional helm auto-completion
 shell=$(which $SHELL | cut -d'/' -f3)
@@ -41,57 +37,28 @@ rm -f .completion
 
 function secure_helm {
 
-	# parse input
+	# TODO: parse input
+
     # service_account_name 
     # namespace
 
     secure_helm_install
     secure_helm_secrets_install
 
-    secure_deploy_cluster_admin \
-        $namespace
+    # TODO: Create RBAC users menu
+    # while []; do
+    # done
 
-    # Create RBAC users
-    while []; do
-        echo ""
-        secure_deploy_tiller_namespace \
-            $namespace \
-            $service_account_name \
-            $service_account_namespace
-        if []; then
-            secure_deploy_tiller_admin \
-                $namespace \
-                $role_name \
-                $rolebinding_name \
-                $service_account_name
-        elif []; then
-            secure_deploy_tiller_manager \
-                $namespace \
-                $role_namespace \
-                $role_name \
-                $rolebinding_name \
-                $service_account_name
-        elif []; then
-            secure_deploy_tiller_user \
-                $namespace \
-                $service_account_namespace \
-                $role_name \
-                $rolebinding_name \
-                $service_account_name
-        else
-            echo "Unknown Option."
-        fi
-    done
-
-    # 
+    # Initialize Helm
     secure_helm_init \
         $service_account_name \
         $namespace
 
+    # TODO: Review basic execution
     secure_verify_charts
     secure_generate_provenance_files
-
     secure_roll_deployments_automatically
     secure_image_pull_secrets
     secure_generate_aliases
+
 }

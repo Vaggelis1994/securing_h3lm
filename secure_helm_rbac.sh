@@ -9,6 +9,11 @@
 # Kubernetes: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
 
 # TODO: Needs better/proper/. re-factoring.
+# TODO: Tiller is dead. RIP. Remove it.
+
+function __check_tiller_namespace {
+
+}
 
 function __create_tiller_namespace {
 
@@ -155,10 +160,7 @@ function secure_deploy_tiller_namespace {
     
     '''
 
-    __create_tiller_namespace \
-        $namespace \
-        $service_account_name \
-        $service_account_namespace
+    __create_tiller_namespace $1 $2 $3
 
 }
 
@@ -167,6 +169,12 @@ function secure_deploy_tiller_admin {
     '''
 
         Deploy Tiller in a namespace, restricted to deploying resources only in that namespace
+
+        Optional:
+        # $1 - namespace
+        # $2 - role_name
+        # $3 - rolebinding_name
+        # $4 - service_account_name
 
     '''
     
@@ -204,8 +212,17 @@ function secure_deploy_tiller_manager {
     '''
 
         Deploy Tiller in a namespace, restricted to deploying resources in another namespace
+
+        Optional:
+        # $1 - namespace
+        # $2 - role_namespace 
+        # $3 - role_name 
+        # $4 - rolebinding_name 
+        # $5 - service_account_namE
     
     '''
+
+    # TODO: Handle arguments
 
     namespace=myorg-system
     role_name=tiller-manager
@@ -267,8 +284,17 @@ function secure_deploy_tiller_user {
     ''' 
     
         Deploy Helm in a namespace, talking to Tiller in another namespace
+
+        Optional: 
+        # $1 - namespace
+        # $2 - service account namespace
+        # $3 - role name
+        # $4 - rolebinding name
+        # $5 - service account name
     
     '''
+
+    # TODO: Handle arguments
 
     service_account_name=helm
     service_account_namespace=helm-world
