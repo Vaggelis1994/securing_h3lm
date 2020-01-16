@@ -4,6 +4,9 @@
 ########################################### Helm Secret ###########################################
 ###################################################################################################
 
+# TODO: function to be implemented for: 
+# https://helm.sh/docs/howto/charts_tips_and_tricks/#tell-helm-not-to-uninstall-a-resource
+
 . ./secure_helm_install.sh 
 
 function __safe_secrets_installation {
