@@ -16,3 +16,5 @@ By default, installing and using Helm is not granting any security at all. While
 * Verification that the **Charts** being signed and valid.
 * Generation of the **provenance** files for integrity purposes.
 * Generation of a helper template to securely create **Image Pull Secrets**.
+
+*Important Note*: The deployed function are to be used with **Helm v.2**. A new set will be deployed for **v.3**. In addition, currently, **Tiller** is deprecated. 
