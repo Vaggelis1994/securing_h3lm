@@ -13,6 +13,11 @@ function __safe_secrets_installation {
 
 }
 
+function __safe_diff_installation {
+    # TODO: helm install plugin diff
+
+}
+
 function secure_helm_secrets_install {
 
     # check helm status
@@ -24,14 +29,18 @@ function secure_helm_secrets_install {
     	echo "URL: https://github.com/futuresimple/helm-secrets seems to be broken!"
     fi
 
-    # TODO: check status of HELM_HOME variable
+    # check status of HELM_HOME variable
+    if [ -z "$HELM_HOME" ]; then 
+        # if not existing, export it
+        mkdir $HOME/.helm
+        export HELM_HOME=$HOME/.helm
+        echo "$HELM_HOME is: " $HELM_HOME
+    fi
 
-    # if not existing, export it
-    mkdir /tmp/randomHelmDirectory
-    export HELM_HOME=/tmp/randomHelmDirectory
-
-    echo $HELM_HOME
-    mkdir $HELM_HOME/plugins
+    # check if plugin directory exists and create it
+    if [ ! -d "$HELM_HOME/plugins" ]; then 
+        mkdir $HELM_HOME/plugins
+    fi
 
     # Install the plugin
     helm plugin install https://github.com/futuresimple/helm-secrets
@@ -42,10 +51,8 @@ function secure_helm_secrets_install {
         echo "There was an issue with the installation. Please try to follow the instructions on the website."
     fi
 
-    # TODO: Check the redirection logic
-
-    # Generate output usage
-    helm secrets help 2>&1
+    # Generate output usage, hide it if erroneous
+    helm secrets help 2>/dev/null
 
     # Visit the documentation for more info
     echo "Visit: https://github.com/futuresimple/helm-secrets for more information on usage."
@@ -167,8 +174,6 @@ function secure_secrets_generate_aliases {
     alias secure_helm_secrets_template="helm secrets template"
     alias secure_helm_secrets_upgrade="helm secrets upgrade"
     alias secure_helm_secrets_lint="helm secrets lint"
-    
-    # TODO: helm install plugin diff
-    # alias secure_helm_secrets_diff="helm secrets diff"        
+    alias secure_helm_secrets_diff="helm secrets diff"        
 
 }
