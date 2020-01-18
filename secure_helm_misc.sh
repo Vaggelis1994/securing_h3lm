@@ -7,6 +7,7 @@
 function secure_roll_deployments_automatically {
 
     '''
+       
         Often times _ConfigMaps_ or _Secrets_ are injected as configuration files in containers or 
         there are other external dependencies changes that require rolling pods. Depending on 
         the application a restart may be required should those be updated with a subsequent 

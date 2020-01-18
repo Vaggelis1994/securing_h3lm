@@ -19,9 +19,9 @@ function __create_tiller_namespace {
 
     '''
 
-    # $1 = namespace
-    # $2 = service_account_name
-    # $3 = service_account_namespace
+        # $1 = namespace
+        # $2 = service_account_name
+        # $3 = service_account_namespace
     
     '''
     
@@ -38,8 +38,8 @@ function __deploy_service_account {
 
     '''
     
-    # $1 = service_account_name
-    # $2 = service_account_namespace
+        # $1 = service_account_name
+        # $2 = service_account_namespace
     
     '''
 
@@ -58,9 +58,9 @@ function __deploy_role {
 
     '''
     
-    # $1 = role_name
-    # $2 = role_namespace
-    # $3 = rules
+        # $1 = role_name
+        # $2 = role_namespace
+        # $3 = rules
     
     '''
  
@@ -80,11 +80,11 @@ function __deploy_rolebinding {
 
     '''
 
-    # $1 = rolebinding_name
-    # $2 = rolebinding_namespace
-    # $3 = service_account_name
-    # $4 = service_account_namespace
-    # $5 = role_name
+        # $1 = rolebinding_name
+        # $2 = rolebinding_namespace
+        # $3 = service_account_name
+        # $4 = service_account_namespace
+        # $5 = role_name
 
     '''
 
@@ -106,10 +106,10 @@ function __deploy_clusterrolebinding {
 
     '''
 
-    # $1 = clusterrolebinding_name
-    # $2 = service_account_name
-    # $3 = service_account_namespace
-    # $4 = clusterrole_name
+        # $1 = clusterrolebinding_name
+        # $2 = service_account_name
+        # $3 = service_account_namespace
+        # $4 = clusterrole_name
 
     '''
 
@@ -129,7 +129,9 @@ function __deploy_clusterrolebinding {
 function secure_deploy_cluster_admin {
 
     '''
-        https://v2.helm.sh/docs/using_helm/#example-service-account-with-cluster-admin-role
+
+        Source: https://v2.helm.sh/docs/using_helm/#example-service-account-with-cluster-admin-role
+    
     '''
 
     namespace=kube-system
@@ -154,9 +156,9 @@ function secure_deploy_tiller_namespace {
 
     '''
         
-    # $1 = namespace
-    # $2 = service_account_name
-    # $3 = service_account_namespace
+        # $1 = namespace
+        # $2 = service_account_name
+        # $3 = service_account_namespace
     
     '''
 

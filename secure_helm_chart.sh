@@ -89,7 +89,7 @@ function __keybase_verify_charts {
 
     '''
 
-    # $1 - user
+        # $1 - user
     
     '''
 
@@ -103,10 +103,10 @@ function secure_chart_packaging {
 
     '''
     
-    # $1 - chart directory
-    # $2 - gpg or keybase
-    # $3 - path to secring.gpg
-    # $4 - key phrase
+        # $1 - chart directory
+        # $2 - gpg or keybase
+        # $3 - path to secring.gpg
+        # $4 - key phrase
     
     '''
 
@@ -166,10 +166,10 @@ function secure_verify_charts {
 
     '''
     
-    Source: http://helm.sh/docs/topics/provenance/
-    
-    # $1 - chart directory
-    # $2 - mode
+        Source: http://helm.sh/docs/topics/provenance/
+        
+        # $1 - chart directory
+        # $2 - mode
     
     '''
     

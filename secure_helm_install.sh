@@ -5,8 +5,13 @@
 ###################################################################################################
 
 function __install_helm {
-    # Install Helm binary using the latest version script for its repo
 
+    '''
+        
+        Install Helm binary using the latest version script for its repo
+
+    '''
+    
     echo "Helm is not installed. Installing it..."
     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > get_helm.sh
     chmod 700 get_helm.sh
@@ -26,6 +31,7 @@ function __safe_helm_installation {
 }
 
 function __remove_existed_tiller {
+
     # TODO: check is existing certificates can be used
     
     # Check TLS usage status, in case the certificates under HELM_HOME can be used
@@ -54,10 +60,13 @@ function __remove_existed_tiller {
 }
 
 function __openssl_ca_generation {
+
     # Generate the CA to issue the certificates
     echo "Generating the CA to issue the certificates..."
+    
     openssl genrsa \
         -out ca.key.pem 4096
+    
     openssl req \
         -key ca.key.pem \
         -new \
@@ -70,22 +79,32 @@ function __openssl_ca_generation {
 }
 
 function __openssl_cert_generation {
-    # Generate the certificates for the $1 component
-    # $1 -> the component for which the certificates will be generated
+    
+    '''
+
+        Generate the certificates for the given argumen ($1) component.
+        
+        # $1 -> the component for which the certificates will be generated
+    
+    '''
+    
     if [ $# -ne 1 ]; then
         echo "Please specify the entity for which the TLS certificates will 
               be deployed"
     fi
 
     echo "Generating the certificates for the $1 end..."
+    
     openssl genrsa \
         -out $1.key.pem 4096
+    
     openssl req \
         -key $1.key.pem \
         -new \
         -sha256 \
         -out $1.csr.pem \
         -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com"
+    
     openssl x509 -req \
         -CA ca.cert.pem \
         -CAkey ca.key.pem \
@@ -136,7 +155,13 @@ function secure_helm_install {
 
 function secure_helm_init {
 
-    #$1 = accountname
+    '''
+
+        # $1 - accountname
+    
+    '''
+
+    # TODO: Review
     # --override 'spec.template.spec.containers[0].command'='{/tiller,--storage=secret}'
     # will make sure that release info is a secret
 

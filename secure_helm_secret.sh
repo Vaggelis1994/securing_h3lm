@@ -55,7 +55,7 @@ function secure_helm_secrets_encrypt {
 
     '''
 
-    # $1 - file to be encrypted
+        # $1 - file to be encrypted
     
     '''
 
@@ -77,7 +77,7 @@ function secure_helm_secrets_decrypt {
 
     '''
 
-    # $1 - file to be decrypted
+        # $1 - file to be decrypted
     
     '''
 
@@ -99,7 +99,7 @@ function secure_helm_secrets_view {
     
     '''
 
-    # $1 - file to be viewed-only
+        # $1 - file to be viewed-only
     
     '''
 
@@ -121,7 +121,7 @@ function secure_helm_secretes_edit {
     
     '''
 
-    # $1 - file to be edited and encrypted
+        # $1 - file to be edited and encrypted
     
     '''
 
@@ -144,7 +144,7 @@ function secure_helm_secrets_clean {
 
     '''
 
-    # $1 - directory to be cleared
+        # $1 - directory to be cleared
     
     '''
 
